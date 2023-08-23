@@ -1,6 +1,6 @@
 const SearchBar = () => {
     return (
-        <section className="relative">
+        <section className="relative max-w-[822px] max-h-[50px]">
             <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                 <svg
                     width="20"
@@ -24,7 +24,7 @@ const SearchBar = () => {
             </div>
             <input
                 type="search"
-                className="block w-full p-4 pl-10 text-sm text-white border border-none rounded-2xl bg-slate-700 "
+                className="block w-full p-4 pl-12 text-sm text-white border border-none rounded-2xl bg-slate-700 "
                 required
             />
         </section>
