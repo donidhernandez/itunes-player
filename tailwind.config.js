@@ -7,6 +7,10 @@ module.exports = {
                 slate: {
                     700: '#1A1A1A',
                 },
+                dark: {
+                    800: '#1B1B1B',
+                    900: '#14151F',
+                },
                 indigo: {
                     600: '#5C67DE',
                 },

@@ -1,4 +1,4 @@
-const StepForward = () => {
+const StepForwardIcon = () => {
     return (
         <svg
             width="18"
@@ -15,4 +15,4 @@ const StepForward = () => {
     )
 }
 
-export default StepForward
+export default StepForwardIcon
