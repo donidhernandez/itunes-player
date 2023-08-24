@@ -1,9 +1,13 @@
-const PauseIcon = () => {
+interface IPauseIcon {
+    iconDimension?: number
+}
+
+const PauseIcon = ({ iconDimension }: IPauseIcon) => {
     return (
         <>
             <svg
-                width="20"
-                height="20"
+                width={iconDimension ?? 20}
+                height={iconDimension ?? 20}
                 viewBox="0 0 20 20"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"

@@ -1,7 +1,21 @@
-const SoundDetails = () => {
+interface ISoundDetails {
+    imageStyles?: {
+        height: string
+        width: string
+        borderRadius: string
+    }
+    containerStyles?: {
+        minWidth: string
+    }
+}
+
+const SoundDetails = ({ imageStyles, containerStyles }: ISoundDetails) => {
     return (
-        <section className="flex items-center gap-4 min-w-[450px] max-w-full">
-            <img src="https://picsum.photos/110/" />
+        <section
+            className={`flex items-center gap-4  max-w-full`}
+            style={containerStyles ?? { minWidth: '450px' }}
+        >
+            <img src="https://picsum.photos/110/" style={imageStyles} />
             <div>
                 <h3 className="text-white font-medium text-base leading-5">
                     How to make your partner talk more
