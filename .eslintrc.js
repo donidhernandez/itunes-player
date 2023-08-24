@@ -7,7 +7,6 @@ module.exports = {
         'standard-with-typescript',
         'plugin:react/recommended',
         'prettier',
-        'plugin:@tanstack/eslint-plugin-query/recommended',
     ],
     overrides: [
         {
@@ -26,13 +25,11 @@ module.exports = {
         sourceType: 'module',
         project: './tsconfig.json',
     },
-    plugins: ['react', '@tanstack/query'],
+    plugins: ['react'],
     rules: {
         '@typescript-eslint/explicit-function-return-type': 'off',
         'react/react-in-jsx-scope': 'off',
         '@typescript-eslint/triple-slash-reference': 'off',
         '@typescript-eslint/no-unused-vars': 'warn',
-        '@tanstack/query/exhaustive-deps': 'error',
-        '@tanstack/query/prefer-query-object-syntax': 'error',
     },
 }
