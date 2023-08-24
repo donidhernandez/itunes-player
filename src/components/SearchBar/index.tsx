@@ -2,7 +2,7 @@ import SearchIcon from '../Icons/SearchIcon'
 
 const SearchBar = () => {
     return (
-        <section className="relative max-w-[822px] max-h-[50px]">
+        <section className="relative min-w-[822px] max-h-[50px]">
             <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                 <SearchIcon />
             </div>

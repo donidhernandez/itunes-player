@@ -6,6 +6,7 @@ module.exports = {
             colors: {
                 slate: {
                     700: '#1A1A1A',
+                    800: '#0A0A0A',
                 },
                 dark: {
                     800: '#1B1B1B',
