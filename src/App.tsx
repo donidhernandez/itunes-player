@@ -1,3 +1,4 @@
+import { Toaster } from 'sonner'
 import AudioPlayer from './components/AudioPlayer'
 import OrderBySelect from './components/OrderBySelect'
 import PodcastList from './components/PodcastList'
@@ -15,6 +16,7 @@ function App() {
             </section>
 
             <AudioPlayer />
+            <Toaster richColors closeButton duration={3000} />
         </main>
     )
 }

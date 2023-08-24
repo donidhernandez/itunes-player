@@ -3,6 +3,7 @@ import { usePodcastsContext } from '../../context/Podcasts'
 import useDebounce from '../../services/hooks/useDebounce'
 import SearchIcon from '../Icons/SearchIcon'
 import searchPodcasts from '../../services/queries/searchPodcast'
+import { toast } from 'sonner'
 
 const SearchBar = () => {
     const { searchTerm, updateSearchTerm, updatePodcasts } =
@@ -23,8 +24,7 @@ const SearchBar = () => {
 
     useEffect(() => {
         handleSearchPodcasts().catch((error) => {
-            // TODO: handle error
-            console.error(error)
+            toast.error(error.message)
         })
     }, [searchTerm])
 
