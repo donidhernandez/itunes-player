@@ -70,35 +70,6 @@ const PodcastList = () => {
                 </tbody>
             </table>
         </div>
-
-        // <table classNameName="table-auto w-full">
-        //     <thead classNameName="text-sm font-semibold text-white opacity-30">
-        //         <tr classNameName="text-left">
-        //             <th>#</th>
-        //             <th>Name</th>
-        //             <th>Description</th>
-        //             <th>Released</th>
-        //             <th>
-        //                 <ClockIcon />
-        //             </th>
-        //         </tr>
-        //     </thead>
-        //     <tbody>
-        //         <tr>
-        //             <td>
-        //                 <PlayButton {...buttonStyles} />
-        //             </td>
-        //             <td>
-        //                 <SoundDetails {...soundDetailsStyles} />
-        //             </td>
-        //             <td classNameName="text-white opacity-30">
-        //                 Lorem ipsum dolor sit amet consectetur adipisicing elit.
-        //             </td>
-        //             <td classNameName="text-white opacity-30">an hour ago</td>
-        //             <td classNameName="text-white opacity-30">8:12</td>
-        //         </tr>
-        //     </tbody>
-        // </table>
     )
 }
 

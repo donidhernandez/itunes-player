@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import PauseIcon from '../Icons/PauseIcon'
 import PlayIcon from '../Icons/PlayIcon'
+import PauseIcon from '../Icons/PauseIcon'
 
 interface IPlayButton {
     playButton?: {
