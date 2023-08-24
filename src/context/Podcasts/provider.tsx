@@ -7,25 +7,18 @@ interface IPodcastsProvider {
 }
 
 const PodcastsProvider = ({ children }: IPodcastsProvider) => {
-    const [searchTerm, setSearchTerm] = useState('')
-    const [podcasts, setPodCasts] = useState([])
-
-    const updateSearchTerm = (value: string) => {
-        setSearchTerm(value)
-    }
+    const [podcasts, setPodcasts] = useState([])
 
     const updatePodcasts = (podcastList: Podcast[]) => {
-        setPodCasts(podcastList)
+        setPodcasts(podcastList)
     }
 
     const memoedValue = useMemo(() => {
         return {
-            searchTerm,
             podcasts,
-            updateSearchTerm,
             updatePodcasts,
         }
-    }, [searchTerm, podcasts])
+    }, [podcasts, updatePodcasts])
 
     return (
         <PodcastsContext.Provider value={memoedValue}>
