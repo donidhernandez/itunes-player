@@ -3,11 +3,14 @@ import ReactDOM from 'react-dom/client'
 import './index.css'
 import App from './App'
 import reportWebVitals from './reportWebVitals'
+import PodcastsProvider from './context/Podcasts/provider'
 
-const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement)
+const root = ReactDOM.createRoot(document.getElementById('root'))
 root.render(
     <StrictMode>
-        <App />
+        <PodcastsProvider>
+            <App />
+        </PodcastsProvider>
     </StrictMode>
 )
 
