@@ -12,7 +12,7 @@ interface ISoundDetails {
 const SoundDetails = ({ imageStyles, containerStyles }: ISoundDetails) => {
     return (
         <section
-            className={`flex items-center gap-4  max-w-full`}
+            className="flex items-center gap-4  max-w-full"
             style={containerStyles ?? { minWidth: '450px' }}
         >
             <img src="https://picsum.photos/110/" style={imageStyles} />
