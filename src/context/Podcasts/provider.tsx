@@ -1,24 +1,35 @@
-import { type ReactNode, useMemo, useState } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { PodcastsContext } from './context'
-import { type Podcast } from '../../types'
+import type { IContextProvider, Podcast } from '../../types'
 
-interface IPodcastsProvider {
-    children: ReactNode
-}
-
-const PodcastsProvider = ({ children }: IPodcastsProvider) => {
+const PodcastsProvider = ({ children }: IContextProvider) => {
     const [podcasts, setPodcasts] = useState([])
+    const [currentPodcast, setCurrentPodcast] = useState<Podcast>(null)
+    const audioRef = useRef()
 
     const updatePodcasts = (podcastList: Podcast[]) => {
         setPodcasts(podcastList)
     }
 
+    const updateCurrentPodcast = (podcast: Podcast) => {
+        setCurrentPodcast({ ...podcast })
+    }
+
     const memoedValue = useMemo(() => {
         return {
+            audioRef,
+            currentPodcast,
             podcasts,
             updatePodcasts,
+            updateCurrentPodcast,
         }
-    }, [podcasts, updatePodcasts])
+    }, [
+        podcasts,
+        updatePodcasts,
+        audioRef,
+        currentPodcast,
+        updateCurrentPodcast,
+    ])
 
     return (
         <PodcastsContext.Provider value={memoedValue}>

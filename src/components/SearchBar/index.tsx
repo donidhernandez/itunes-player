@@ -6,7 +6,7 @@ import searchPodcasts from '../../services/queries/searchPodcast'
 import { toast } from 'sonner'
 
 const SearchBar = () => {
-    const [searchTerm, setSearchTerm] = useState(null)
+    const [searchTerm, setSearchTerm] = useState('')
     const { updatePodcasts } = usePodcastsContext()
 
     const debouncedSearch = useDebounce(searchTerm, 500)

@@ -1,3 +1,5 @@
+import { type ReactNode } from 'react'
+
 export interface Podcast {
     wrapperType: string
     kind: string
@@ -8,6 +10,7 @@ export interface Podcast {
     trackName: string
     collectionCensoredName: string
     trackCensoredName: string
+    previewUrl: string
     collectionViewUrl: string
     feedUrl: string
     trackViewUrl: string
@@ -29,4 +32,8 @@ export interface Podcast {
     artworkUrl600: string
     genreIds: string[]
     genres: string[]
+}
+
+export interface IContextProvider {
+    children: ReactNode
 }

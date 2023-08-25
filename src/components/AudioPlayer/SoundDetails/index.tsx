@@ -5,7 +5,7 @@ interface ISoundDetails {
     imageStyles?: {
         height: string
         width: string
-        borderRadius: string
+        borderRadius?: string
     }
     containerStyles?: {
         minWidth: string
@@ -21,8 +21,8 @@ const SoundDetails = ({
 }: ISoundDetails) => {
     return (
         <section
-            className="flex items-center gap-4  max-w-full"
-            style={containerStyles ?? { minWidth: '450px' }}
+            className="flex items-center gap-4  w-full"
+            style={containerStyles ?? { minWidth: '300px' }}
         >
             <img src={podcastImage} style={imageStyles} />
             <div>
