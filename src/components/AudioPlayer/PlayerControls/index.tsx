@@ -14,7 +14,7 @@ const PlayerControls = () => {
                 <StepBackardIcon />
             </button>
 
-            <PlayButton />
+            <PlayButton isActive isOnBottom />
 
             <button>
                 <StepForwardIcon />

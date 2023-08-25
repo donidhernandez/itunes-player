@@ -1,34 +1,10 @@
 import { usePodcastsContext } from '../../context/Podcasts'
 import { type Podcast } from '../../types'
-import SoundDetails from '../AudioPlayer/SoundDetails'
 import ClockIcon from '../Icons/ClockIcon'
-import PlayButton from '../PlayButton'
+import PodcastItem from './PodcastItem'
 
 const PodcastList = () => {
     const { podcasts } = usePodcastsContext()
-
-    const buttonStyles = {
-        playButton: {
-            height: '30px',
-            width: '30px',
-        },
-        pauseButton: {
-            height: '30px',
-            width: '30px',
-            iconDimension: 16,
-        },
-    }
-
-    const soundDetailsStyles = {
-        imageStyles: {
-            height: '45px',
-            width: '45px',
-            borderRadius: '8px',
-        },
-        containerStyles: {
-            minWidth: '100%',
-        },
-    }
 
     return (
         podcasts &&
@@ -56,31 +32,10 @@ const PodcastList = () => {
                     </thead>
                     <tbody>
                         {podcasts.map((podcast: Podcast) => (
-                            <tr
+                            <PodcastItem
                                 key={podcast.trackId}
-                                className="text-sm bg-transparent border-b border-white border-opacity-5"
-                            >
-                                <td>
-                                    <PlayButton {...buttonStyles} />
-                                </td>
-                                <td className="px-6 py-4">
-                                    <SoundDetails
-                                        artistName={podcast.artistName}
-                                        podcastImage={podcast.artworkUrl60}
-                                        podcastName={podcast.collectionName}
-                                        {...soundDetailsStyles}
-                                    />
-                                </td>
-                                <td className="px-6 py-4 text-white opacity-30 truncate">
-                                    {podcast.primaryGenreName}
-                                </td>
-                                <td className="px-6 py-4 text-white opacity-30">
-                                    an hour ago
-                                </td>
-                                <td className="px-6 py-4 text-white opacity-30">
-                                    8:12
-                                </td>
-                            </tr>
+                                podcast={podcast}
+                            />
                         ))}
                     </tbody>
                 </table>
