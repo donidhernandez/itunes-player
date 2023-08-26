@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useAudioPlayer } from 'react-use-audio-player'
+import moment from 'moment'
+
 import { type Podcast } from '../../../types'
 import SoundDetails from '../../AudioPlayer/SoundDetails'
 import { usePodcastsContext } from '../../../context/Podcasts'
@@ -41,6 +43,14 @@ const PodcastItem = ({ podcast }: IPodcastItem) => {
         },
     }
 
+    const getReleasedDate = (date: Date) => {
+        return moment(date).startOf('hour').fromNow()
+    }
+
+    const getTrackDuration = (time: number) => {
+        return moment(time).format('mm:ss')
+    }
+
     const handlePlay = () => {
         if (!isActive) {
             updateCurrentPodcast(podcast)
@@ -79,8 +89,12 @@ const PodcastItem = ({ podcast }: IPodcastItem) => {
             <td className="px-6 py-4 text-white opacity-30 truncate">
                 {podcast.primaryGenreName}
             </td>
-            <td className="px-6 py-4 text-white opacity-30">an hour ago</td>
-            <td className="px-6 py-4 text-white opacity-30">8:12</td>
+            <td className="px-6 py-4 text-white opacity-30">
+                {getReleasedDate(podcast.releaseDate)}
+            </td>
+            <td className="px-6 py-4 text-white opacity-30">
+                {getTrackDuration(podcast.trackTimeMillis)}
+            </td>
         </tr>
     )
 }
