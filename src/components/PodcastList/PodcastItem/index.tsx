@@ -7,15 +7,19 @@ import SoundDetails from '../../AudioPlayer/SoundDetails'
 import { usePodcastsContext } from '../../../context/Podcasts'
 import PauseIcon from '../../Icons/PauseIcon'
 import PlayIcon from '../../Icons/PlayIcon'
+import { useNavigate } from 'react-router-dom'
+import { toast } from 'sonner'
 
 interface IPodcastItem {
     podcast: Podcast
 }
 
 const PodcastItem = ({ podcast }: IPodcastItem) => {
-    const { currentPodcast, updateCurrentPodcast } = usePodcastsContext()
+    const { currentPodcast, updateCurrentPodcast, getPodcastByName } =
+        usePodcastsContext()
     const [isActive, setIsActive] = useState(false)
     const { playing, load, togglePlayPause } = useAudioPlayer()
+    const navigate = useNavigate()
 
     useEffect(() => {
         if (currentPodcast) {
@@ -60,6 +64,17 @@ const PodcastItem = ({ podcast }: IPodcastItem) => {
         }
     }
 
+    const goToPodcast = (artistName: string) => {
+        const podcast: Podcast = getPodcastByName(artistName)
+        if (podcast) {
+            navigate(`/podcast/${podcast.collectionId}`)
+        } else {
+            return toast.error(
+                'There is no podcast available with this artist name'
+            )
+        }
+    }
+
     return (
         <tr className="text-sm bg-transparent border-b border-white border-opacity-5">
             <td>
@@ -80,6 +95,7 @@ const PodcastItem = ({ podcast }: IPodcastItem) => {
             </td>
             <td className="px-6 py-4">
                 <SoundDetails
+                    goToPodcast={goToPodcast}
                     artistName={podcast.artistName}
                     podcastImage={podcast.artworkUrl60}
                     podcastName={podcast.collectionName}

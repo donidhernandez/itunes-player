@@ -5,15 +5,23 @@ import { shuffleArray } from '../../utils/shuffleArray'
 
 const PodcastsProvider = ({ children }: IContextProvider) => {
     const [podcasts, setPodcasts] = useState([])
-    const [currentPodcast, setCurrentPodcast] = useState<Podcast>(null)
+    const [currentPodcast, setCurrentPodcast] = useState<Podcast>()
     const audioRef = useRef()
 
     const updatePodcasts = (podcastList: Podcast[]) => {
+        localStorage.setItem('podcasts', JSON.stringify(podcastList))
         setPodcasts(podcastList)
     }
 
     const updateCurrentPodcast = (podcast: Podcast) => {
+        localStorage.setItem('current_podcast', JSON.stringify(podcast))
         setCurrentPodcast({ ...podcast })
+    }
+
+    const getPodcastByName = (artistName: string) => {
+        return podcasts.find(
+            (podcast: Podcast) => podcast.artistName === artistName
+        )
     }
 
     const shuffleTracks = () => {
@@ -65,6 +73,7 @@ const PodcastsProvider = ({ children }: IContextProvider) => {
             shuffleTracks,
             getPreviousPodcast,
             getNextPodcast,
+            getPodcastByName,
         }
     }, [
         podcasts,

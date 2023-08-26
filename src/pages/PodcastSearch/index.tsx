@@ -9,7 +9,7 @@ const PodcastSearch = () => {
 
     return (
         <>
-            <section className="max-w-4xl pt-10 mb-20">
+            <section className="md:max-w-4xl w-full pt-10 mb-20">
                 <SearchBar />
                 <section className="flex justify-end pt-10">
                     <OrderBySelect />
