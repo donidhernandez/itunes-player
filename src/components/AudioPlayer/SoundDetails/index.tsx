@@ -17,13 +17,9 @@ const SoundDetails = ({
     podcastImage,
     podcastName,
     imageStyles,
-    containerStyles,
 }: ISoundDetails) => {
     return (
-        <section
-            className="flex items-center gap-4  w-full"
-            style={containerStyles ?? { minWidth: '300px' }}
-        >
+        <section className="flex items-center gap-4  w-1/2">
             <img src={podcastImage} style={imageStyles} />
             <div>
                 <h3 className="text-white font-medium text-base leading-5">

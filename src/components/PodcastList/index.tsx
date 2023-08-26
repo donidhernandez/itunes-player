@@ -31,11 +31,8 @@ const PodcastList = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {podcasts.map((podcast: Podcast) => (
-                            <PodcastItem
-                                key={podcast.trackId}
-                                podcast={podcast}
-                            />
+                        {podcasts.map((podcast: Podcast, index) => (
+                            <PodcastItem key={index} podcast={podcast} />
                         ))}
                     </tbody>
                 </table>
