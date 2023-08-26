@@ -21,6 +21,7 @@ const AudioPlayer = () => {
     const [trackPosition, setTrackPosition] = useState(0)
     const {
         currentPodcast,
+        podcasts,
         shuffleTracks,
         getPreviousPodcast,
         getNextPodcast,
@@ -115,7 +116,11 @@ const AudioPlayer = () => {
     )
 
     return (
-        <section className="flex items-center w-full sticky bottom-0 bg-slate-700">
+        <section
+            className={`flex items-center w-full bottom-0 bg-slate-700 ${
+                podcasts.length === 0 ? 'absolute' : 'sticky'
+            }`}
+        >
             <SoundDetails
                 artistName={currentPodcast.artistName}
                 podcastImage={currentPodcast.artworkUrl100}
