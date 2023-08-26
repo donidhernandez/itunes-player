@@ -19,7 +19,13 @@ const AudioPlayer = () => {
     const [audioVolume, setAudioVolume] = useState(50)
     const [pos, setPos] = useState(0)
     const [trackPosition, setTrackPosition] = useState(0)
-    const { currentPodcast, shuffleTracks } = usePodcastsContext()
+    const {
+        currentPodcast,
+        shuffleTracks,
+        getPreviousPodcast,
+        getNextPodcast,
+    } = usePodcastsContext()
+
     const {
         playing,
         load,
@@ -47,6 +53,9 @@ const AudioPlayer = () => {
             load(currentPodcast.previewUrl, {
                 autoplay: false,
                 initialMute: false,
+                onend() {
+                    getNextPodcast()
+                },
             })
         }
     }, [currentPodcast])
@@ -113,11 +122,12 @@ const AudioPlayer = () => {
                 podcastName={currentPodcast.collectionName}
                 {...soundDetailsStyles}
             />
-            <section className="w-1/3 flex gap-6 mx-3">
+            <section className="w-1/3 flex gap-8 mx-3">
                 <button onClick={shuffleTracks}>
                     <ShuffleIcon />
                 </button>
-                <button>
+
+                <button onClick={getPreviousPodcast}>
                     <StepBackardIcon />
                 </button>
 
@@ -130,7 +140,7 @@ const AudioPlayer = () => {
                     {playing ? <PauseIcon /> : <PlayIcon />}
                 </button>
 
-                <button>
+                <button onClick={getNextPodcast}>
                     <StepForwardIcon />
                 </button>
 
