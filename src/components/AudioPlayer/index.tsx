@@ -19,8 +19,7 @@ const AudioPlayer = () => {
     const [audioVolume, setAudioVolume] = useState(50)
     const [pos, setPos] = useState(0)
     const [trackPosition, setTrackPosition] = useState(0)
-    const { podcasts, updateCurrentPodcast, currentPodcast } =
-        usePodcastsContext()
+    const { currentPodcast, shuffleTracks } = usePodcastsContext()
     const {
         playing,
         load,
@@ -53,19 +52,21 @@ const AudioPlayer = () => {
     }, [currentPodcast])
 
     useEffect(() => {
-        const animate = () => {
-            setTrackPosition(getPosition())
-            frameRef.current = requestAnimationFrame(animate)
-        }
+        if (currentPodcast) {
+            const animate = () => {
+                setTrackPosition(getPosition())
+                frameRef.current = requestAnimationFrame(animate)
+            }
 
-        frameRef.current = window.requestAnimationFrame(animate)
+            frameRef.current = window.requestAnimationFrame(animate)
 
-        return () => {
-            if (frameRef.current) {
-                cancelAnimationFrame(frameRef.current)
+            return () => {
+                if (frameRef.current) {
+                    cancelAnimationFrame(frameRef.current)
+                }
             }
         }
-    }, [])
+    }, [currentPodcast])
 
     const goTo = useCallback(
         (event) => {
@@ -93,11 +94,16 @@ const AudioPlayer = () => {
         }
     }, [getPosition, currentPodcast])
 
-    const handleVolumeChange = useCallback((e) => {
-        setAudioVolume(e.target.value)
-        const ratio = e.target.value / 100
-        setVolume(ratio)
-    }, [])
+    const handleVolumeChange = useCallback(
+        (e) => {
+            if (currentPodcast) {
+                setAudioVolume(e.target.value)
+                const ratio = e.target.value / 100
+                setVolume(ratio)
+            }
+        },
+        [currentPodcast]
+    )
 
     return (
         <section className="flex items-center w-full sticky bottom-0 bg-slate-700">
@@ -108,7 +114,7 @@ const AudioPlayer = () => {
                 {...soundDetailsStyles}
             />
             <section className="w-1/3 flex gap-6 mx-3">
-                <button>
+                <button onClick={shuffleTracks}>
                     <ShuffleIcon />
                 </button>
                 <button>

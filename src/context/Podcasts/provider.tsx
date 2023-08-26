@@ -1,6 +1,7 @@
 import { useMemo, useRef, useState } from 'react'
 import { PodcastsContext } from './context'
 import type { IContextProvider, Podcast } from '../../types'
+import { shuffle } from '../../utils/shuffleArray'
 
 const PodcastsProvider = ({ children }: IContextProvider) => {
     const [podcasts, setPodcasts] = useState([])
@@ -15,6 +16,13 @@ const PodcastsProvider = ({ children }: IContextProvider) => {
         setCurrentPodcast({ ...podcast })
     }
 
+    const shuffleTracks = () => {
+        const shuffledTracks = shuffle([...podcasts])
+        const newCurrentPodcast = shuffledTracks[0]
+        setPodcasts(shuffledTracks)
+        updateCurrentPodcast(newCurrentPodcast)
+    }
+
     const memoedValue = useMemo(() => {
         return {
             audioRef,
@@ -22,6 +30,7 @@ const PodcastsProvider = ({ children }: IContextProvider) => {
             podcasts,
             updatePodcasts,
             updateCurrentPodcast,
+            shuffleTracks,
         }
     }, [
         podcasts,
