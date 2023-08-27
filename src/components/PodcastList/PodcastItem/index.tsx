@@ -4,19 +4,23 @@ import moment from 'moment'
 
 import { type Podcast } from '../../../types'
 import SoundDetails from '../../AudioPlayer/SoundDetails'
-import { usePodcastsContext } from '../../../context/Podcasts'
 import PauseIcon from '../../Icons/PauseIcon'
 import PlayIcon from '../../Icons/PlayIcon'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
+import usePodcastActions from '../../../hooks/store/usePodcastActions'
+import { useAppSelector } from '../../../hooks/store/store'
 
 interface IPodcastItem {
     podcast: Podcast
 }
 
 const PodcastItem = ({ podcast }: IPodcastItem) => {
-    const { currentPodcast, updateCurrentPodcast, getPodcastByName } =
-        usePodcastsContext()
+    const { podcasts, currentPodcast } = useAppSelector(
+        (state) => state.podcasts
+    )
+
+    const { newCurrentPodcast } = usePodcastActions()
     const [isActive, setIsActive] = useState(false)
     const { playing, load, togglePlayPause } = useAudioPlayer()
     const navigate = useNavigate()
@@ -57,7 +61,7 @@ const PodcastItem = ({ podcast }: IPodcastItem) => {
 
     const handlePlay = () => {
         if (!isActive) {
-            updateCurrentPodcast(podcast)
+            newCurrentPodcast(podcast)
             setIsActive(true)
         } else {
             togglePlayPause()
@@ -65,8 +69,12 @@ const PodcastItem = ({ podcast }: IPodcastItem) => {
     }
 
     const goToPodcast = (artistName: string) => {
-        const podcast: Podcast = getPodcastByName(artistName)
-        if (podcast) {
+        const foundedPodcast = podcasts.find(
+            (podcast: Podcast) => podcast.artistName === artistName
+        )
+
+        if (foundedPodcast) {
+            newCurrentPodcast(foundedPodcast)
             navigate(`/podcast/${podcast.collectionId}`)
         } else {
             return toast.error(

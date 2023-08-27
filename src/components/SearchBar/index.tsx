@@ -1,20 +1,20 @@
 import { useEffect, useState } from 'react'
-import { usePodcastsContext } from '../../context/Podcasts'
-import useDebounce from '../../services/hooks/useDebounce'
+import useDebounce from '../../hooks/useDebounce'
 import SearchIcon from '../Icons/SearchIcon'
 import searchPodcasts from '../../services/queries/searchPodcast'
 import { toast } from 'sonner'
+import usePodcastActions from '../../hooks/store/usePodcastActions'
 
 const SearchBar = () => {
     const [searchTerm, setSearchTerm] = useState('')
-    const { updatePodcasts } = usePodcastsContext()
+    const { updatePodcastsList } = usePodcastActions()
 
     const debouncedSearch = useDebounce(searchTerm, 500)
     const handleSearchPodcasts = async () => {
-        updatePodcasts([])
         if (debouncedSearch) {
             const podcastsResponse = await searchPodcasts(debouncedSearch)
-            updatePodcasts(podcastsResponse.results)
+
+            updatePodcastsList(podcastsResponse.results)
         }
     }
 

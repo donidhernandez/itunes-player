@@ -9,15 +9,13 @@ import { type PodcastDetail } from '../../types'
 import { useParams } from 'react-router-dom'
 import PauseIcon from '../../components/Icons/PauseIcon'
 import PlayIcon from '../../components/Icons/PlayIcon'
-import { usePodcastsContext } from '../../context/Podcasts'
+import { useAppSelector } from '../../hooks/store/store'
 
 const PodcastDetails = () => {
     const [podcast, setPodcast] = useState<PodcastDetail>()
-    const { currentPodcast } = usePodcastsContext()
+    const { currentPodcast } = useAppSelector((state) => state.podcasts)
     const [playing, setPlaying] = useState(false)
     const { id } = useParams()
-
-    console.log(currentPodcast)
 
     const lookupPodcastDetails = async () => {
         const podcast = await lookUpPodcast(id)

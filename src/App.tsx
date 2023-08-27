@@ -4,7 +4,7 @@ import router from './router'
 
 function App() {
     return (
-        <main className="h-full min-h-screen px-10 bg-gradient-to-br from-slate-800 to-dark-900 flex flex-col items-center">
+        <main className="h-full min-h-screen bg-gradient-to-br from-slate-800 to-dark-900 flex flex-col items-center">
             <RouterProvider router={router} />
             <Toaster richColors closeButton duration={3000} />
         </main>

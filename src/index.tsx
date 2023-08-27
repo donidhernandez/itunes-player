@@ -3,14 +3,15 @@ import ReactDOM from 'react-dom/client'
 import './index.css'
 import App from './App'
 import reportWebVitals from './reportWebVitals'
-import PodcastsProvider from './context/Podcasts/provider'
+import { Provider } from 'react-redux'
+import { store } from './store'
 
 const root = ReactDOM.createRoot(document.getElementById('root'))
 root.render(
     <StrictMode>
-        <PodcastsProvider>
+        <Provider store={store}>
             <App />
-        </PodcastsProvider>
+        </Provider>
     </StrictMode>
 )
 
