@@ -1,5 +1,3 @@
-import { type ReactNode } from 'react'
-
 export interface PodacastAPIResponse {
     resultCount: number
     results: Podcast[]
@@ -44,10 +42,6 @@ export interface Podcast {
     artworkUrl600: string
     genreIds: string[]
     genres: string[]
-}
-
-export interface IContextProvider {
-    children: ReactNode
 }
 
 export interface PodcastRSS {

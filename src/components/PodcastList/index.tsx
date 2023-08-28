@@ -4,9 +4,11 @@ import ClockIcon from '../Icons/ClockIcon'
 import PodcastItem from './PodcastItem'
 
 const PodcastList = () => {
-    const { podcasts, currentPodcast } = useAppSelector(
+    const { orderedPodcasts, currentPodcast } = useAppSelector(
         (state) => state.podcasts
     )
+
+    console.log(orderedPodcasts)
 
     return (
         <div className="relative overflow-x-auto mt-10">
@@ -32,8 +34,8 @@ const PodcastList = () => {
                 </thead>
 
                 <tbody>
-                    {podcasts && podcasts.length > 0
-                        ? podcasts.map((podcast: Podcast, index) => (
+                    {orderedPodcasts && orderedPodcasts.length > 0
+                        ? orderedPodcasts.map((podcast: Podcast, index) => (
                               <PodcastItem key={index} podcast={podcast} />
                           ))
                         : currentPodcast && (
