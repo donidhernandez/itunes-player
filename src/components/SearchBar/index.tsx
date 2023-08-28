@@ -17,7 +17,7 @@ const SearchBar = () => {
     }
 
     useEffect(() => {
-        if (podcasts) {
+        if (podcasts && searchTerm !== '') {
             updatePodcastsList(podcasts.results)
         }
     }, [podcasts])

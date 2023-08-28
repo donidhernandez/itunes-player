@@ -52,14 +52,7 @@ const AudioPlayer = () => {
 
     useEffect(() => {
         if (currentPodcast) {
-            load(currentPodcast.podcastToPreview, {
-                format: 'mp3',
-                autoplay: false,
-                html5: true,
-                onend() {
-                    getNextPodcast()
-                },
-            })
+            loadAudio()
         }
     }, [currentPodcast])
 
@@ -120,6 +113,17 @@ const AudioPlayer = () => {
         },
         [currentPodcast]
     )
+
+    const loadAudio = () => {
+        load(currentPodcast.podcastToPreview, {
+            format: 'mp3',
+            autoplay: false,
+            html5: true,
+            onend() {
+                getNextPodcast()
+            },
+        })
+    }
 
     const getPreviousPodcast = () => {
         const findCurrentPodcast = podcasts.find(
@@ -187,7 +191,7 @@ const AudioPlayer = () => {
                     <StepForwardIcon />
                 </button>
 
-                <button>
+                <button onClick={loadAudio}>
                     <RetryIcon />
                 </button>
             </section>
