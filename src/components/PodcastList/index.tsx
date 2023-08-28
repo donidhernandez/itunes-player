@@ -1,10 +1,12 @@
-import { usePodcastsContext } from '../../context/Podcasts'
+import { useAppSelector } from '../../hooks/store/store'
 import { type Podcast } from '../../types'
 import ClockIcon from '../Icons/ClockIcon'
 import PodcastItem from './PodcastItem'
 
 const PodcastList = () => {
-    const { podcasts, currentPodcast } = usePodcastsContext()
+    const { podcasts, currentPodcast } = useAppSelector(
+        (state) => state.podcasts
+    )
 
     return (
         <div className="relative overflow-x-auto mt-10">

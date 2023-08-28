@@ -1,4 +1,5 @@
 interface ISoundDetails {
+    goToPodcast?: (artistnName: string) => void
     artistName?: string
     podcastName?: string
     podcastImage?: string
@@ -17,11 +18,16 @@ const SoundDetails = ({
     podcastImage,
     podcastName,
     imageStyles,
+    goToPodcast,
 }: ISoundDetails) => {
     return (
-        <section className="flex items-center gap-4  w-1/2">
+        <section className="flex items-center gap-4  w-1/2 cursor-pointer">
             <img src={podcastImage} style={imageStyles} />
-            <div>
+            <div
+                onClick={() => {
+                    goToPodcast(artistName)
+                }}
+            >
                 <h3 className="text-white font-medium text-base leading-5">
                     {podcastName}
                 </h3>

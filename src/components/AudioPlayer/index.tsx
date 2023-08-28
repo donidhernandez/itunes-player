@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useAudioPlayer } from 'react-use-audio-player'
 
-import { usePodcastsContext } from '../../context/Podcasts'
 import RetryIcon from '../Icons/RetryIcon'
 import ShuffleIcon from '../Icons/ShuffleIcon'
 import StepBackardIcon from '../Icons/StepBackardIcon'
@@ -14,18 +13,20 @@ import PlayIcon from '../Icons/PlayIcon'
 import MutedVolumeIcon from '../Icons/MutedVolumeIcon'
 import VolumeIcon from '../Icons/VolumeIcon'
 import { formatTime } from '../../utils/formatTime'
+import usePodcastActions from '../../hooks/store/usePodcastActions'
+import { useAppSelector } from '../../hooks/store/store'
+import { type Podcast } from '../../types'
 
 const AudioPlayer = () => {
     const [audioVolume, setAudioVolume] = useState(50)
     const [pos, setPos] = useState(0)
     const [trackPosition, setTrackPosition] = useState(0)
-    const {
-        currentPodcast,
-        podcasts,
-        shuffleTracks,
-        getPreviousPodcast,
-        getNextPodcast,
-    } = usePodcastsContext()
+
+    const { podcasts, currentPodcast } = useAppSelector(
+        (state) => state.podcasts
+    )
+    const { shufflePodcastList, newCurrentPodcast, updatePlayAudio } =
+        usePodcastActions()
 
     const {
         playing,
@@ -38,22 +39,23 @@ const AudioPlayer = () => {
         seek,
         getPosition,
     } = useAudioPlayer()
+
     const soundDetailsStyles = {
         imageStyles: {
             height: '110px',
             width: '110px',
         },
     }
-
     const frameRef = useRef<number>()
 
     const seekBarElem = useRef<HTMLDivElement>(null)
 
     useEffect(() => {
         if (currentPodcast) {
-            load(currentPodcast.previewUrl, {
+            load(currentPodcast.podcastToPreview, {
+                format: 'mp3',
                 autoplay: false,
-                initialMute: false,
+                html5: true,
                 onend() {
                     getNextPodcast()
                 },
@@ -78,6 +80,22 @@ const AudioPlayer = () => {
         }
     }, [currentPodcast])
 
+    useEffect(() => {
+        if (currentPodcast) {
+            const i = setInterval(() => {
+                setPos(getPosition())
+            }, 500)
+
+            return () => {
+                clearInterval(i)
+            }
+        }
+    }, [getPosition, currentPodcast])
+
+    useEffect(() => {
+        updatePlayAudio(playing)
+    }, [playing])
+
     const goTo = useCallback(
         (event) => {
             const { pageX: eventOffsetX } = event
@@ -92,18 +110,6 @@ const AudioPlayer = () => {
         [duration, playing, seek]
     )
 
-    useEffect(() => {
-        if (currentPodcast) {
-            const i = setInterval(() => {
-                setPos(getPosition())
-            }, 500)
-
-            return () => {
-                clearInterval(i)
-            }
-        }
-    }, [getPosition, currentPodcast])
-
     const handleVolumeChange = useCallback(
         (e) => {
             if (currentPodcast) {
@@ -114,6 +120,38 @@ const AudioPlayer = () => {
         },
         [currentPodcast]
     )
+
+    const getPreviousPodcast = () => {
+        const findCurrentPodcast = podcasts.find(
+            (podcast: Podcast) => podcast.trackId === currentPodcast.trackId
+        )
+
+        if (findCurrentPodcast) {
+            const currentLength = podcasts.length
+            const currentIndex = podcasts.indexOf(findCurrentPodcast)
+
+            const previousPodcast =
+                podcasts[
+                    currentIndex === 0 ? currentLength - 1 : currentIndex - 1
+                ]
+            newCurrentPodcast(previousPodcast)
+        }
+    }
+
+    const getNextPodcast = () => {
+        const findCurrentPodcast = podcasts.find(
+            (podcast) => podcast.trackId === currentPodcast.trackId
+        )
+
+        if (findCurrentPodcast) {
+            const currentLength = podcasts.length
+            const currentIndex = podcasts.indexOf(findCurrentPodcast)
+
+            const nextPodcast =
+                podcasts[currentIndex === currentLength ? 0 : currentIndex + 1]
+            newCurrentPodcast(nextPodcast)
+        }
+    }
 
     return (
         <section
@@ -128,7 +166,7 @@ const AudioPlayer = () => {
                 {...soundDetailsStyles}
             />
             <section className="w-1/3 flex gap-8 mx-3">
-                <button onClick={shuffleTracks}>
+                <button onClick={shufflePodcastList}>
                     <ShuffleIcon />
                 </button>
 
@@ -153,6 +191,7 @@ const AudioPlayer = () => {
                     <RetryIcon />
                 </button>
             </section>
+
             <section className="flex  w-1/2 items-center gap-4 text-white ml-4">
                 <span>{formatTime(pos)}</span>
                 <div

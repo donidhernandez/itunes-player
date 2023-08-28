@@ -4,27 +4,24 @@ import moment from 'moment'
 
 import { type Podcast } from '../../../types'
 import SoundDetails from '../../AudioPlayer/SoundDetails'
-import { usePodcastsContext } from '../../../context/Podcasts'
 import PauseIcon from '../../Icons/PauseIcon'
 import PlayIcon from '../../Icons/PlayIcon'
+import { useNavigate } from 'react-router-dom'
+import { toast } from 'sonner'
+import usePodcastActions from '../../../hooks/store/usePodcastActions'
+import { useAppSelector } from '../../../hooks/store/store'
+import rssParser from '../../../services/queries/rssParser'
 
 interface IPodcastItem {
     podcast: Podcast
 }
 
 const PodcastItem = ({ podcast }: IPodcastItem) => {
-    const { currentPodcast, updateCurrentPodcast } = usePodcastsContext()
+    const { podcasts, isPlaying } = useAppSelector((state) => state.podcasts)
+    const { newCurrentPodcast, updatePlayAudio } = usePodcastActions()
     const [isActive, setIsActive] = useState(false)
-    const { playing, load, togglePlayPause } = useAudioPlayer()
-
-    useEffect(() => {
-        if (currentPodcast) {
-            load(currentPodcast.previewUrl, {
-                autoplay: false,
-                initialMute: false,
-            })
-        }
-    }, [currentPodcast])
+    const { togglePlayPause } = useAudioPlayer()
+    const navigate = useNavigate()
 
     const buttonStyles = {
         height: '30px',
@@ -51,12 +48,34 @@ const PodcastItem = ({ podcast }: IPodcastItem) => {
         return moment(time).format('mm:ss')
     }
 
-    const handlePlay = () => {
+    const handlePlay = async () => {
         if (!isActive) {
-            updateCurrentPodcast(podcast)
+            const feed = await rssParser(podcast.feedUrl)
+            const podcastToPreview = feed.items[0].enclosure.url
+            const podcastToPlay = {
+                ...podcast,
+                podcastList: feed,
+                podcastToPreview,
+            }
+            newCurrentPodcast(podcastToPlay)
             setIsActive(true)
         } else {
             togglePlayPause()
+        }
+    }
+
+    const goToPodcast = (artistName: string) => {
+        const foundedPodcast = podcasts.find(
+            (podcast: Podcast) => podcast.artistName === artistName
+        )
+
+        if (foundedPodcast) {
+            newCurrentPodcast(foundedPodcast)
+            navigate(`/podcast/${podcast.collectionId}`)
+        } else {
+            return toast.error(
+                'There is no podcast available with this artist name'
+            )
         }
     }
 
@@ -64,12 +83,13 @@ const PodcastItem = ({ podcast }: IPodcastItem) => {
         <tr className="text-sm bg-transparent border-b border-white border-opacity-5">
             <td>
                 <button
+                    // eslint-disable-next-line @typescript-eslint/no-misused-promises
                     onClick={handlePlay}
                     className={`h-[30px] w-[30px] flex items-center justify-center p-2 rounded-full transition-all duration-300 ease-in-out ${
-                        playing && 'rounded-full bg-indigo-600'
+                        isPlaying && isActive && 'rounded-full bg-indigo-600'
                     }`}
                 >
-                    {playing ? (
+                    {isPlaying && isActive ? (
                         <PauseIcon
                             iconDimension={buttonStyles?.iconDimension}
                         />
@@ -80,6 +100,7 @@ const PodcastItem = ({ podcast }: IPodcastItem) => {
             </td>
             <td className="px-6 py-4">
                 <SoundDetails
+                    goToPodcast={goToPodcast}
                     artistName={podcast.artistName}
                     podcastImage={podcast.artworkUrl60}
                     podcastName={podcast.collectionName}
