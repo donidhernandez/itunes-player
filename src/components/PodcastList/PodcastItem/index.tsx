@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useAudioPlayer } from 'react-use-audio-player'
 import moment from 'moment'
 
@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 import usePodcastActions from '../../../hooks/store/usePodcastActions'
 import { useAppSelector } from '../../../hooks/store/store'
+import rssParser from '../../../services/queries/rssParser'
 
 interface IPodcastItem {
     podcast: Podcast
@@ -19,20 +20,19 @@ const PodcastItem = ({ podcast }: IPodcastItem) => {
     const { podcasts, currentPodcast } = useAppSelector(
         (state) => state.podcasts
     )
-
     const { newCurrentPodcast } = usePodcastActions()
     const [isActive, setIsActive] = useState(false)
     const { playing, load, togglePlayPause } = useAudioPlayer()
     const navigate = useNavigate()
 
-    useEffect(() => {
-        if (currentPodcast) {
-            load(currentPodcast.previewUrl, {
-                autoplay: false,
-                initialMute: false,
-            })
-        }
-    }, [currentPodcast])
+    // useEffect(() => {
+    //     if (currentPodcast) {
+    //         load(currentPodcast.previewUrl, {
+    //             autoplay: false,
+    //             initialMute: false,
+    //         })
+    //     }
+    // }, [currentPodcast])
 
     const buttonStyles = {
         height: '30px',
@@ -59,9 +59,11 @@ const PodcastItem = ({ podcast }: IPodcastItem) => {
         return moment(time).format('mm:ss')
     }
 
-    const handlePlay = () => {
+    const handlePlay = async () => {
         if (!isActive) {
-            newCurrentPodcast(podcast)
+            // newCurrentPodcast(podcast)
+            const feed = await rssParser(podcast.feedUrl)
+            console.log(feed)
             setIsActive(true)
         } else {
             togglePlayPause()
@@ -87,6 +89,7 @@ const PodcastItem = ({ podcast }: IPodcastItem) => {
         <tr className="text-sm bg-transparent border-b border-white border-opacity-5">
             <td>
                 <button
+                    // eslint-disable-next-line @typescript-eslint/no-misused-promises
                     onClick={handlePlay}
                     className={`h-[30px] w-[30px] flex items-center justify-center p-2 rounded-full transition-all duration-300 ease-in-out ${
                         playing && 'rounded-full bg-indigo-600'

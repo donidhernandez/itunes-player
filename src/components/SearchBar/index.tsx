@@ -1,32 +1,30 @@
 import { useEffect, useState } from 'react'
 import useDebounce from '../../hooks/useDebounce'
 import SearchIcon from '../Icons/SearchIcon'
-import searchPodcasts from '../../services/queries/searchPodcast'
 import { toast } from 'sonner'
 import usePodcastActions from '../../hooks/store/usePodcastActions'
+import { useSearchPodcastsQuery } from '../../services/podcasts'
 
 const SearchBar = () => {
     const [searchTerm, setSearchTerm] = useState('')
     const { updatePodcastsList } = usePodcastActions()
 
     const debouncedSearch = useDebounce(searchTerm, 500)
-    const handleSearchPodcasts = async () => {
-        if (debouncedSearch) {
-            const podcastsResponse = await searchPodcasts(debouncedSearch)
-
-            updatePodcastsList(podcastsResponse.results)
-        }
-    }
+    const { data: podcasts, isError } = useSearchPodcastsQuery(debouncedSearch)
 
     const handleSetSearchTerm = (e: { target: { value: string } }) => {
         setSearchTerm(e.target.value)
     }
 
     useEffect(() => {
-        handleSearchPodcasts().catch((error) => {
-            toast.error(error.message)
-        })
-    }, [debouncedSearch, searchTerm])
+        if (podcasts) {
+            updatePodcastsList(podcasts.results)
+        }
+    }, [podcasts])
+
+    if (isError) {
+        toast.error('There was an error fetching podcast')
+    }
 
     return (
         <section className="relative w-full h-[50px]">

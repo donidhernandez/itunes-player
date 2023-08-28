@@ -1,32 +1,24 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import BackButton from '../../components/BackButton'
 import OrderBySelect from '../../components/OrderBySelect'
 import PodcastList from '../../components/PodcastList'
 import SearchBar from '../../components/SearchBar'
-import lookUpPodcast from '../../services/queries/lookUpPodcast'
-import { toast } from 'sonner'
-import { type PodcastDetail } from '../../types'
 import { useParams } from 'react-router-dom'
 import PauseIcon from '../../components/Icons/PauseIcon'
 import PlayIcon from '../../components/Icons/PlayIcon'
 import { useAppSelector } from '../../hooks/store/store'
+import AudioPlayer from '../../components/AudioPlayer'
+
+import { useLookupPodcastQuery } from '../../services/podcasts'
 
 const PodcastDetails = () => {
-    const [podcast, setPodcast] = useState<PodcastDetail>()
     const { currentPodcast } = useAppSelector((state) => state.podcasts)
+
     const [playing, setPlaying] = useState(false)
     const { id } = useParams()
 
-    const lookupPodcastDetails = async () => {
-        const podcast = await lookUpPodcast(id)
-        setPodcast(podcast.results[0])
-    }
-
-    useEffect(() => {
-        lookupPodcastDetails().catch((error) => {
-            return toast.error(error.message)
-        })
-    }, [])
+    const { data: podcast, isError } = useLookupPodcastQuery(id)
+    console.log(podcast)
 
     return (
         podcast && (
@@ -38,8 +30,8 @@ const PodcastDetails = () => {
                     </section>
 
                     <img
-                        src={podcast.artworkUrl600}
-                        alt={podcast.artistName}
+                        src={podcast.results[0].artworkUrl600}
+                        alt={podcast.results[0].artistName}
                         className="max-h-[400px] my-4 h-full w-full object-fit rounded-2xl"
                     />
 
@@ -52,14 +44,14 @@ const PodcastDetails = () => {
                             {playing ? <PauseIcon /> : <PlayIcon />}
                         </button>
                         <h1 className="text-white text-4xl text-center font-bold">
-                            {podcast.trackName}
+                            {podcast.results[0].trackName}
                         </h1>
                         <OrderBySelect />
                     </section>
                     <PodcastList />
                 </section>
 
-                {/* {currentPodcast && <AudioPlayer />} */}
+                {currentPodcast && <AudioPlayer />}
             </>
         )
     )
