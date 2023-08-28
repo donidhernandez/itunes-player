@@ -5,6 +5,7 @@ import { shuffleArray } from '../../../utils/shuffleArray'
 const DEFAULT_STATE = {
     podcasts: [],
     currentPodcast: null,
+    isPlaying: false,
 }
 
 const initialState = (() => {
@@ -16,6 +17,9 @@ export const podcastSlice = createSlice({
     name: 'podcasts',
     initialState,
     reducers: {
+        updateIsPlaying: (state, action: PayloadAction<boolean>) => {
+            state.isPlaying = action.payload
+        },
         updatePodcasts: (state, action: PayloadAction<Podcast[]>) => {
             state.podcasts = [...action.payload]
         },
@@ -74,4 +78,5 @@ export const {
     getPreviousPodcast,
     getNextPodcast,
     shuffleTracks,
+    updateIsPlaying,
 } = podcastSlice.actions

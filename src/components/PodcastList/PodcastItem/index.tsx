@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useAudioPlayer } from 'react-use-audio-player'
 import moment from 'moment'
 
@@ -17,22 +17,11 @@ interface IPodcastItem {
 }
 
 const PodcastItem = ({ podcast }: IPodcastItem) => {
-    const { podcasts, currentPodcast } = useAppSelector(
-        (state) => state.podcasts
-    )
-    const { newCurrentPodcast } = usePodcastActions()
+    const { podcasts, isPlaying } = useAppSelector((state) => state.podcasts)
+    const { newCurrentPodcast, updatePlayAudio } = usePodcastActions()
     const [isActive, setIsActive] = useState(false)
-    const { playing, load, togglePlayPause } = useAudioPlayer()
+    const { togglePlayPause } = useAudioPlayer()
     const navigate = useNavigate()
-
-    // useEffect(() => {
-    //     if (currentPodcast) {
-    //         load(currentPodcast.previewUrl, {
-    //             autoplay: false,
-    //             initialMute: false,
-    //         })
-    //     }
-    // }, [currentPodcast])
 
     const buttonStyles = {
         height: '30px',
@@ -61,9 +50,14 @@ const PodcastItem = ({ podcast }: IPodcastItem) => {
 
     const handlePlay = async () => {
         if (!isActive) {
-            // newCurrentPodcast(podcast)
             const feed = await rssParser(podcast.feedUrl)
-            console.log(feed)
+            const podcastToPreview = feed.items[0].enclosure.url
+            const podcastToPlay = {
+                ...podcast,
+                podcastList: feed,
+                podcastToPreview,
+            }
+            newCurrentPodcast(podcastToPlay)
             setIsActive(true)
         } else {
             togglePlayPause()
@@ -92,10 +86,10 @@ const PodcastItem = ({ podcast }: IPodcastItem) => {
                     // eslint-disable-next-line @typescript-eslint/no-misused-promises
                     onClick={handlePlay}
                     className={`h-[30px] w-[30px] flex items-center justify-center p-2 rounded-full transition-all duration-300 ease-in-out ${
-                        playing && 'rounded-full bg-indigo-600'
+                        isPlaying && isActive && 'rounded-full bg-indigo-600'
                     }`}
                 >
-                    {playing ? (
+                    {isPlaying && isActive ? (
                         <PauseIcon
                             iconDimension={buttonStyles?.iconDimension}
                         />

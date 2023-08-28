@@ -17,7 +17,7 @@ const PodcastSearch = () => {
                 <PodcastList />
             </section>
 
-            {/* {currentPodcast && <AudioPlayer />} */}
+            {currentPodcast && <AudioPlayer />}
         </>
     )
 }

@@ -3,6 +3,7 @@ import {
     getPreviousPodcast,
     shuffleTracks,
     updateCurrentPodcast,
+    updateIsPlaying,
     updatePodcasts,
 } from '../../store/slices/podcasts/slice'
 import { type Podcast } from '../../types'
@@ -13,6 +14,10 @@ const usePodcastActions = () => {
 
     const updatePodcastsList = (podcasts: Podcast[]) => {
         dispatch(updatePodcasts(podcasts))
+    }
+
+    const updatePlayAudio = (isPlaying: boolean) => {
+        dispatch(updateIsPlaying(isPlaying))
     }
 
     const newCurrentPodcast = (podcast: Podcast) => {
@@ -37,6 +42,7 @@ const usePodcastActions = () => {
         shufflePodcastList,
         getPrevPodcast,
         getNextPodcast,
+        updatePlayAudio,
     }
 }
 

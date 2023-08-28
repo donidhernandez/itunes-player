@@ -25,7 +25,8 @@ const AudioPlayer = () => {
     const { podcasts, currentPodcast } = useAppSelector(
         (state) => state.podcasts
     )
-    const { shufflePodcastList, newCurrentPodcast } = usePodcastActions()
+    const { shufflePodcastList, newCurrentPodcast, updatePlayAudio } =
+        usePodcastActions()
 
     const {
         playing,
@@ -38,22 +39,23 @@ const AudioPlayer = () => {
         seek,
         getPosition,
     } = useAudioPlayer()
+
     const soundDetailsStyles = {
         imageStyles: {
             height: '110px',
             width: '110px',
         },
     }
-
     const frameRef = useRef<number>()
 
     const seekBarElem = useRef<HTMLDivElement>(null)
 
     useEffect(() => {
         if (currentPodcast) {
-            load(currentPodcast.previewUrl, {
+            load(currentPodcast.podcastToPreview, {
+                format: 'mp3',
                 autoplay: false,
-                initialMute: false,
+                html5: true,
                 onend() {
                     getNextPodcast()
                 },
@@ -89,6 +91,10 @@ const AudioPlayer = () => {
             }
         }
     }, [getPosition, currentPodcast])
+
+    useEffect(() => {
+        updatePlayAudio(playing)
+    }, [playing])
 
     const goTo = useCallback(
         (event) => {
@@ -185,6 +191,7 @@ const AudioPlayer = () => {
                     <RetryIcon />
                 </button>
             </section>
+
             <section className="flex  w-1/2 items-center gap-4 text-white ml-4">
                 <span>{formatTime(pos)}</span>
                 <div
