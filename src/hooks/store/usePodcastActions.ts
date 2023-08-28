@@ -5,8 +5,10 @@ import {
     updateCurrentPodcast,
     updateIsPlaying,
     updatePodcasts,
+    updateSortBy,
 } from '../../store/slices/podcasts/slice'
 import { type Podcast } from '../../types'
+import { type Options } from '../../utils/enums'
 import { useAppDispatch } from './store'
 
 const usePodcastActions = () => {
@@ -36,6 +38,10 @@ const usePodcastActions = () => {
         dispatch(getNxtPodcast(null))
     }
 
+    const updateSortByOption = (option: Options) => {
+        dispatch(updateSortBy(option))
+    }
+
     return {
         updatePodcastsList,
         newCurrentPodcast,
@@ -43,6 +49,7 @@ const usePodcastActions = () => {
         getPrevPodcast,
         getNextPodcast,
         updatePlayAudio,
+        updateSortByOption,
     }
 }
 

@@ -1,11 +1,14 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 import { type Podcast } from '../../../types'
 import { shuffleArray } from '../../../utils/shuffleArray'
+import { Options } from '../../../utils/enums'
 
 const DEFAULT_STATE = {
     podcasts: [],
+    orderedPodcasts: [],
     currentPodcast: null,
     isPlaying: false,
+    sortBy: Options.None,
 }
 
 const initialState = (() => {
@@ -20,8 +23,37 @@ export const podcastSlice = createSlice({
         updateIsPlaying: (state, action: PayloadAction<boolean>) => {
             state.isPlaying = action.payload
         },
+        updateSortBy: (state, action: PayloadAction<Options>) => {
+            state.sortBy = action.payload
+            let orderedPodcasts = state.podcasts
+            switch (action.payload) {
+                case Options.None:
+                    orderedPodcasts = state.podcasts
+                    break
+                case Options.Name:
+                    orderedPodcasts = state.podcasts.toSorted(
+                        (a: Podcast, b: Podcast) =>
+                            a.collectionName.localeCompare(b.collectionName)
+                    )
+                    break
+                case Options.Date:
+                    orderedPodcasts = state.podcasts.toSorted(
+                        (a: Podcast, b: Podcast) =>
+                            new Date(b.releaseDate).getTime() -
+                            new Date(a.releaseDate).getTime()
+                    )
+                    break
+                case Options.Description:
+                    orderedPodcasts = state.podcasts.toSorted(
+                        (a: Podcast, b: Podcast) =>
+                            a.primaryGenreName.localeCompare(b.primaryGenreName)
+                    )
+            }
+            state.orderedPodcasts = orderedPodcasts
+        },
         updatePodcasts: (state, action: PayloadAction<Podcast[]>) => {
             state.podcasts = [...action.payload]
+            state.orderedPodcasts = [...action.payload]
         },
         updateCurrentPodcast: (state, action: PayloadAction<Podcast>) => {
             state.currentPodcast = action.payload
@@ -79,4 +111,5 @@ export const {
     getNextPodcast,
     shuffleTracks,
     updateIsPlaying,
+    updateSortBy,
 } = podcastSlice.actions
