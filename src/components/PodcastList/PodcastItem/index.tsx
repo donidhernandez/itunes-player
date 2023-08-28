@@ -43,8 +43,10 @@ const PodcastItem = ({ podcast }: IPodcastItem) => {
     }
 
     useEffect(() => {
-        if (currentPodcast.trackId === podcast.trackId) {
-            setIsActive(true)
+        if (currentPodcast) {
+            if (currentPodcast.trackId === podcast.trackId) {
+                setIsActive(true)
+            }
         }
     }, [currentPodcast])
 
