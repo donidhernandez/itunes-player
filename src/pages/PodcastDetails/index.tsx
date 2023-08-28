@@ -1,3 +1,5 @@
+import { Suspense } from 'react'
+
 import BackButton from '../../components/BackButton'
 import OrderBySelect from '../../components/OrderBySelect'
 import SearchBar from '../../components/SearchBar'
@@ -6,11 +8,17 @@ import PlayIcon from '../../components/Icons/PlayIcon'
 import { useAppSelector } from '../../hooks/store/store'
 import AudioPlayer from '../../components/AudioPlayer'
 import PodcastList from '../../components/PodcastList'
+import Loader from '../../components/Loader'
+import NotFoundPage from '../404'
 
 const PodcastDetails = () => {
-    const { currentPodcast, isPlaying } = useAppSelector(
+    const { podcasts, currentPodcast, isPlaying } = useAppSelector(
         (state) => state.podcasts
     )
+
+    if (!currentPodcast) {
+        return <NotFoundPage />
+    }
 
     return (
         currentPodcast && (
@@ -38,9 +46,11 @@ const PodcastDetails = () => {
                         <h1 className="text-white text-2xl text-center font-bold">
                             {currentPodcast.trackName}
                         </h1>
-                        <OrderBySelect />
+                        {podcasts && podcasts.length > 0 && <OrderBySelect />}
                     </section>
-                    <PodcastList />
+                    <Suspense fallback={<Loader />}>
+                        {podcasts && podcasts.length > 0 && <PodcastList />}
+                    </Suspense>
                 </section>
 
                 {currentPodcast && <AudioPlayer />}
