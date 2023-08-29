@@ -85,7 +85,10 @@ const PodcastItem = ({ podcast }: IPodcastItem) => {
     }
 
     return (
-        <tr className="text-sm bg-transparent border-b border-white border-opacity-5">
+        <tr
+            data-testid="podcast-row"
+            className="text-sm bg-transparent border-b border-white border-opacity-5"
+        >
             <td>
                 <button
                     // eslint-disable-next-line @typescript-eslint/no-misused-promises

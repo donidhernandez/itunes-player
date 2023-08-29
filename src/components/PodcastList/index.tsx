@@ -8,8 +8,6 @@ const PodcastList = () => {
         (state) => state.podcasts
     )
 
-    console.log(orderedPodcasts)
-
     return (
         <div className="relative overflow-x-auto mt-10">
             <table className="w-full text-left">
@@ -33,7 +31,7 @@ const PodcastList = () => {
                     </tr>
                 </thead>
 
-                <tbody>
+                <tbody data-testid="table-body">
                     {orderedPodcasts && orderedPodcasts.length > 0
                         ? orderedPodcasts.map((podcast: Podcast, index) => (
                               <PodcastItem key={index} podcast={podcast} />

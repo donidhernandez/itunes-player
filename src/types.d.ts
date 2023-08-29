@@ -13,7 +13,7 @@ export interface Podcast {
     kind: string
     collectionId: number
     podcastToPreview?: string
-    podcastList: PodcastRSS[]
+    podcastList?: PodcastRSS[]
     trackId: number
     artistName: string
     collectionName: string
