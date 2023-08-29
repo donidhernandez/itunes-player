@@ -83,7 +83,10 @@ module.exports = {
         ],
         'react-hooks/rules-of-hooks': 'error',
         'react-hooks/exhaustive-deps': 0,
+        '@typescript-eslint/return-await': 'off',
         '@typescript-eslint/strict-boolean-expressions': 'off',
+        '@typescript-eslint/no-confusing-void-expression': 'off',
+        '@typescript-eslint/ban-types': 'off',
     },
     settings: {
         react: {
